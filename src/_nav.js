@@ -10,6 +10,15 @@ export default {
       },
     },
     {
+      name: 'TForm',
+      url: '/tform',
+      icon: 'icon-speedometer',
+      badge: {
+        variant: 'info',
+        text: 'NEW',
+      },
+    },
+    {
       title: true,
       name: 'Theme',
       wrapper: {            // optional wrapper object

@@ -31,6 +31,7 @@ import {
   Tooltips,
   Typography,
   Widgets,
+  TForm,
 } from './views';
 import Full from './containers/Full';
 
@@ -38,6 +39,7 @@ import Full from './containers/Full';
 const routes = [
   { path: '/', exact: true, name: 'Home', component: Full },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
+  { path: '/tform', name: 'TForm', component: TForm },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },
   { path: '/theme/typography', name: 'Typography', component: Typography },
