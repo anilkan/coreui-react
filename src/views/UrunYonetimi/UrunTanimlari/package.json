@@ -1,0 +1,6 @@
+{
+	"name": "UrunTanimlari",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./UrunTanimlari.js"
+}

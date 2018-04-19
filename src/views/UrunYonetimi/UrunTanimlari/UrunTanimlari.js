@@ -18,7 +18,7 @@ import {
 	Table
 } from "reactstrap";
 
-class TForm extends Component {
+class UrunTanimlari extends Component {
 	constructor(props) {
 		super(props);
 
@@ -196,4 +196,4 @@ class TForm extends Component {
 	}
 }
 
-export default TForm;
+export default UrunTanimlari;
