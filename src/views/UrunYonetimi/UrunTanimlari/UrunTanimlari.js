@@ -3,6 +3,7 @@ import {
 	Button,
 	Card,
 	CardBody,
+	CardHeader,
 	CardFooter,
 	Col,
 	Form,
@@ -10,33 +11,38 @@ import {
 	Input,
 	Label,
 	Row,
-	Badge,
-	CardHeader,
 	Pagination,
 	PaginationItem,
 	PaginationLink,
-	Table
+	Table,
+	Modal,
+	ModalHeader,
+	ModalBody,
+	ModalFooter
 } from "reactstrap";
+import UrunTanimlariForm from "../UrunTanimlariForm";
 
 class UrunTanimlari extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			formUsername: "",
+			modal: false,
+			formId: "",
 			formName: "",
-			users: []
+			products: []
 		};
 
 		this.clearSearchForm = this.clearSearchForm.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.loadTable = this.loadTable.bind(this);
+
+		this.toggle = this.toggle.bind(this);
 	}
 
 	componentDidMount() {
-		fetch(`https://jsonplaceholder.typicode.com/users`)
-			.then(response => response.json())
-			.then(data => this.setState({ users: data }));
+		//loadTable(null);
+		this.loadTable();
 	}
 
 	handleChange({ target }) {
@@ -45,36 +51,106 @@ class UrunTanimlari extends Component {
 		});
 	}
 
+	toggle() {
+		this.setState({
+			modal: !this.state.modal
+		});
+	}
+
 	clearSearchForm(e) {
 		this.setState({
-			formUsername: "",
+			formId: "",
 			formName: ""
 		});
 	}
 
 	loadTable(e) {
-		e.preventDefault();
+		if (e) e.preventDefault();
 
 		let filter = "";
+
+		if (this.state.formId !== "")
+			filter = filter + "&id=" + this.state.formId;
 
 		if (this.state.formName !== "")
 			filter = filter + "&name=" + this.state.formName;
 
-		if (this.state.formUsername !== "")
-			filter = filter + "&username=" + this.state.formUsername;
-
+		// localhost:8080/v0/products
+		// https://jsonplaceholder.typicode.com/users
 		let filteredURL =
-			"https://jsonplaceholder.typicode.com/users" +
-			filter.replace("&", "?");
+			"http://192.168.1.106:8080/v0/products" + filter.replace("&", "?");
 
 		fetch(filteredURL)
 			.then(response => response.json())
-			.then(data => this.setState({ users: data }));
+			.then(data => this.setState({ products: data }));
 	}
 
 	render() {
 		return (
 			<div className="animated fadeIn">
+				<Row />
+				<Button color="danger" onClick={this.toggle}>
+					{this.props.buttonLabel}
+				</Button>
+				<Modal
+					isOpen={this.state.modal}
+					toggle={this.toggle}
+					className={this.props.className}
+				>
+					<ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+					<ModalBody>
+						<Form onSubmit={this.loadTable}>
+							<Card>
+								<CardBody>
+									<Row>
+										<Col sm="6">
+											<FormGroup>
+												<Label htmlFor="id">Id</Label>
+												<Input
+													type="text"
+													id="id"
+													name="formId"
+													value={this.state.formId}
+													onChange={this.handleChange}
+												/>
+											</FormGroup>
+										</Col>
+									</Row>
+									<Row>
+										<Col sm="6">
+											<FormGroup>
+												<Label htmlFor="name">
+													Name
+												</Label>
+												<Input
+													type="text"
+													id="name"
+													name="formName"
+													value={this.state.formName}
+													onChange={this.handleChange}
+												/>
+											</FormGroup>
+										</Col>
+									</Row>
+								</CardBody>
+								<CardFooter>
+									<Button>Ara</Button>{" "}
+									<Button onClick={this.clearSearchForm}>
+										Temizle
+									</Button>
+								</CardFooter>
+							</Card>
+						</Form>
+					</ModalBody>
+					<ModalFooter>
+						<Button color="primary" onClick={this.toggle}>
+							Do Something
+						</Button>{" "}
+						<Button color="secondary" onClick={this.toggle}>
+							Cancel
+						</Button>
+					</ModalFooter>
+				</Modal>
 				<Row>
 					<Col>
 						<Form onSubmit={this.loadTable}>
@@ -83,16 +159,12 @@ class UrunTanimlari extends Component {
 									<Row>
 										<Col sm="6">
 											<FormGroup>
-												<Label htmlFor="username">
-													Username
-												</Label>
+												<Label htmlFor="id">Id</Label>
 												<Input
 													type="text"
-													id="username"
-													name="formUsername"
-													value={
-														this.state.formUsername
-													}
+													id="id"
+													name="formId"
+													value={this.state.formId}
 													onChange={this.handleChange}
 												/>
 											</FormGroup>
@@ -128,28 +200,29 @@ class UrunTanimlari extends Component {
 				<Row>
 					<Col>
 						<Card>
+							<CardHeader>
+								<Button
+									size="sm"
+									color="success"
+									href="#/urun-yonetimi/urun-tanimlari/form"
+								>
+									<i className="fa fa-dot-circle-o" /> Submit
+								</Button>
+							</CardHeader>
 							<CardBody>
 								<Table responsive striped>
 									<thead>
 										<tr>
-											<th>Username</th>
+											<th>Id</th>
 											<th>Name</th>
-											<th>Email</th>
-											<th>Status</th>
 										</tr>
 									</thead>
 									<tbody>
-										{this.state.users.map(user => {
+										{this.state.products.map(product => {
 											return (
-												<tr>
-													<td>{user.username}</td>
-													<td>{user.name}</td>
-													<td>{user.email}</td>
-													<td>
-														<Badge color="success">
-															Active
-														</Badge>
-													</td>
+												<tr key={product.id}>
+													<td>{product.id}</td>
+													<td>{product.name}</td>
 												</tr>
 											);
 										})}

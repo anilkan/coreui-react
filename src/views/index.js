@@ -1,3 +1,3 @@
-import { UrunTanimlari } from "./UrunYonetimi";
+import { UrunTanimlari, UrunTanimlariForm } from "./UrunYonetimi";
 
-export { UrunTanimlari };
+export { UrunTanimlari, UrunTanimlariForm };

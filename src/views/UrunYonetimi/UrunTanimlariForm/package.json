@@ -1,0 +1,6 @@
+{
+	"name": "UrunTanimlariForm",
+	"version": "0.0.0",
+	"private": true,
+	"main": "./UrunTanimlariForm.js"
+}
